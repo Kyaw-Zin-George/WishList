@@ -9,8 +9,14 @@ import SwiftUI
 import SwiftData
 
 struct ContentView: View {
+    //connect the modelContainer to the all views within the app
     @Environment(\.modelContext) private var modelContext
+    //read all wish objects managed by SwiftData
     @Query private var wishes: [Wish]
+    // for showing alert
+    @State private var isAlertShowing: Bool = false
+    // for holding the value of a new wish
+    @State private var newWishTitle: String = ""
     var body: some View {
         NavigationStack{
             List{
@@ -21,6 +27,26 @@ struct ContentView: View {
                 }
             }//:List
             .navigationTitle("Wishes")
+            .toolbar{
+                ToolbarItem(placement: .topBarTrailing){
+                    Button{
+                        isAlertShowing.toggle()
+                    }label: {
+                        Image(systemName: "plus")
+                            .imageScale(.large)
+                    }
+                }
+            }
+            .alert("Create a new wish",isPresented: $isAlertShowing){
+                TextField("Enter a wish", text: $newWishTitle)
+                Button{
+                    //saves a new wish
+                    modelContext.insert(Wish(title: newWishTitle))
+                    newWishTitle = ""
+                }label: {
+                    Text("Save")
+                }
+            }
             .overlay{
                 if wishes.isEmpty{
                     ContentUnavailableView("My WishList", systemImage: "heart.circle",description: Text("No wish yet"))
