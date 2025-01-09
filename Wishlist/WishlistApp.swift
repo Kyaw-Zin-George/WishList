@@ -6,12 +6,15 @@
 //
 
 import SwiftUI
+import SwiftData
 
 @main
 struct WishlistApp: App {
     var body: some Scene {
         WindowGroup {
             ContentView()
+            //creates a storage for wish object
+                .modelContainer(for: Wish.self)
         }
     }
 }

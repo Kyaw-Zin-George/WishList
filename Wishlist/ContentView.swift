@@ -6,19 +6,29 @@
 //
 
 import SwiftUI
+import SwiftData
 
 struct ContentView: View {
+    @Environment(\.modelContext) private var modelContext
+    @Query private var wishes: [Wish]
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Hello, world!")
+        NavigationStack{
+            List{
+                ForEach(wishes){ wish in
+                    Text(wish.title)
+                }
+            }//:List
+            .navigationTitle("Wishes")
+            .overlay{
+                if wishes.isEmpty{
+                    ContentUnavailableView("My WishList", systemImage: "heart.circle",description: Text("No wish yet"))
+                }
+            }
         }
-        .padding(.top,16)
     }
 }
 
 #Preview {
     ContentView()
+        .modelContainer(for: Wish.self,inMemory: true)
 }
