@@ -24,6 +24,14 @@ struct ContentView: View {
                     Text(wish.title)
                         .font(.title.weight(.light))
                         .padding(.vertical, 2)
+                    //adding delete functionality
+                        .swipeActions{
+                            Button(role: .destructive){
+                                modelContext.delete(wish)
+                            }label: {
+                                Text("Delete")
+                            }
+                        }
                 }
             }//:List
             .navigationTitle("Wishes")
@@ -34,6 +42,12 @@ struct ContentView: View {
                     }label: {
                         Image(systemName: "plus")
                             .imageScale(.large)
+                    }
+                }
+                // adding bottom text to show how many wishes i have made
+                if wishes.isEmpty == false{
+                    ToolbarItem(placement: .bottomBar){
+                        Text("\(wishes.count) wish\(wishes.count > 1 ? "es" : "")")
                     }
                 }
             }
